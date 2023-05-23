@@ -1,52 +1,19 @@
-# Prerequisites
-*.d
+# Configuration
+.vscode
+*.code-workspace
+desktop.ini
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# Output files
+build
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# Back-up files
+sdkconfig.old
 
-# Precompiled Headers
-*.gch
-*.pch
+# TODO and NOTES
+TODO.md
+NOTES.md
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+# Google Drive
+.tmp.driveupload
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# Other files and folders
