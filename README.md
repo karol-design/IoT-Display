@@ -3,7 +3,7 @@
 
 ### CI Workflow results
 
-![ESP-IDF CI Build](https://github.com/karol-design/HertzNet/actions/workflows/esp-idf.yml/badge.svg)
+![ESP-IDF CI Build](https://github.com/karol-design/IoT-Display/actions/workflows/esp-idf.yml/badge.svg)
 
 
 ## About 
