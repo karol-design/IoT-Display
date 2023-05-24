@@ -12,45 +12,113 @@
 #include "esp_http_client.h"
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "http_drv.h"
 #include "nvs_flash.h"
 #include "wifi_drv.h"
 
 #define TAG "app"
 
-#define MAX_BUFFER_SIZE 1024
+#include "lwip/err.h"
+#include "lwip/sockets.h"
+#include "lwip/sys.h"
+#include "lwip/netdb.h"
+#include "lwip/dns.h"
+#include "sdkconfig.h"
 
-// HTTP client event handler
-esp_err_t httpClientEventHandler(esp_http_client_event_t *evt)
+/* Constants that aren't configurable in menuconfig */
+#define WEB_SERVER "gridwatch.templar.co.uk"
+#define WEB_PORT "80"
+#define WEB_PATH "/"
+
+static const char *REQUEST = "GET " WEB_PATH " HTTP/1.0\r\n"
+    "Host: "WEB_SERVER":"WEB_PORT"\r\n"
+    "User-Agent: esp-idf/1.0 esp32\r\n"
+    "\r\n";
+
+static void http_get_task(void *pvParameters)
 {
-    switch (evt->event_id) {
-        case HTTP_EVENT_ERROR:
-            ESP_LOGE(TAG, "HTTP_EVENT_ERROR");
-            break;
-        case HTTP_EVENT_ON_CONNECTED:
-            ESP_LOGI(TAG, "HTTP_EVENT_ON_CONNECTED");
-            break;
-        case HTTP_EVENT_HEADER_SENT:
-            ESP_LOGI(TAG, "HTTP_EVENT_HEADER_SENT");
-            break;
-        case HTTP_EVENT_ON_HEADER:
-            ESP_LOGI(TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", evt->header_key, evt->header_value);
-            break;
-        case HTTP_EVENT_ON_DATA:
-            ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-            if (!esp_http_client_is_chunked_response(evt->client)) {
-                // Print the received data
-                printf("%.*s", evt->data_len, (char*)evt->data);
+    const struct addrinfo hints = {
+        .ai_family = AF_INET,
+        .ai_socktype = SOCK_STREAM,
+    };
+    struct addrinfo *res;
+    struct in_addr *addr;
+    int s, r;
+    char recv_buf[64];
+
+    while(1) {
+        int err = getaddrinfo(WEB_SERVER, WEB_PORT, &hints, &res);
+
+        if(err != 0 || res == NULL) {
+            ESP_LOGE(TAG, "DNS lookup failed err=%d res=%p", err, res);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            continue;
+        }
+
+        /* Code to print the resolved IP.
+
+           Note: inet_ntoa is non-reentrant, look at ipaddr_ntoa_r for "real" code */
+        addr = &((struct sockaddr_in *)res->ai_addr)->sin_addr;
+        ESP_LOGI(TAG, "DNS lookup succeeded. IP=%s", inet_ntoa(*addr));
+
+        s = socket(res->ai_family, res->ai_socktype, 0);
+        if(s < 0) {
+            ESP_LOGE(TAG, "... Failed to allocate socket.");
+            freeaddrinfo(res);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            continue;
+        }
+        ESP_LOGI(TAG, "... allocated socket");
+
+        if(connect(s, res->ai_addr, res->ai_addrlen) != 0) {
+            ESP_LOGE(TAG, "... socket connect failed errno=%d", errno);
+            close(s);
+            freeaddrinfo(res);
+            vTaskDelay(4000 / portTICK_PERIOD_MS);
+            continue;
+        }
+
+        ESP_LOGI(TAG, "... connected");
+        freeaddrinfo(res);
+
+        if (write(s, REQUEST, strlen(REQUEST)) < 0) {
+            ESP_LOGE(TAG, "... socket send failed");
+            close(s);
+            vTaskDelay(4000 / portTICK_PERIOD_MS);
+            continue;
+        }
+        ESP_LOGI(TAG, "... socket send success");
+
+        struct timeval receiving_timeout;
+        receiving_timeout.tv_sec = 5;
+        receiving_timeout.tv_usec = 0;
+        if (setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &receiving_timeout,
+                sizeof(receiving_timeout)) < 0) {
+            ESP_LOGE(TAG, "... failed to set socket receiving timeout");
+            close(s);
+            vTaskDelay(4000 / portTICK_PERIOD_MS);
+            continue;
+        }
+        ESP_LOGI(TAG, "... set socket receiving timeout success");
+
+        /* Read HTTP response */
+        do {
+            bzero(recv_buf, sizeof(recv_buf));
+            r = read(s, recv_buf, sizeof(recv_buf)-1);
+            for(int i = 0; i < r; i++) {
+                putchar(recv_buf[i]);
             }
-            break;
-        case HTTP_EVENT_ON_FINISH:
-            ESP_LOGI(TAG, "HTTP_EVENT_ON_FINISH");
-            break;
-        case HTTP_EVENT_DISCONNECTED:
-            ESP_LOGI(TAG, "HTTP_EVENT_DISCONNECTED");
-            break;
+        } while(r > 0);
+
+        ESP_LOGI(TAG, "... done reading from socket. Last read return=%d errno=%d.", r, errno);
+        close(s);
+        for(int countdown = 10; countdown >= 0; countdown--) {
+            ESP_LOGI(TAG, "%d... ", countdown);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+        }
+        ESP_LOGI(TAG, "Starting again!");
     }
-    return ESP_OK;
 }
 
 void app_main(void) {
@@ -69,21 +137,7 @@ void app_main(void) {
     ESP_LOGI(TAG, "WiFi RSSI: %d", wifi_drv_get_rssi());
     vTaskDelay(500 / portTICK_PERIOD_MS);
 
-    // Configure HTTP client
-    esp_http_client_config_t httpConfig = {
-        .url = "http://www.testingmcafeesites.com/index.html",
-        .event_handler = httpClientEventHandler,
-    };
-
-    // Perform HTTP request
-    esp_http_client_handle_t client = esp_http_client_init(&httpConfig);
-    err = esp_http_client_perform(client);
-    if (err == ESP_OK) {
-        ESP_LOGI(TAG, "HTTP request complete");
-    } else {
-        ESP_LOGE(TAG, "HTTP request failed: %s", esp_err_to_name(err));
-    }
-    esp_http_client_cleanup(client);
+    xTaskCreate(&http_get_task, "http_get_task", 4096, NULL, 5, NULL);
 
     while (true) {
         if (wifi_drv_connected() == false) {
