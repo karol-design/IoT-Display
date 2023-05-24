@@ -18,3 +18,8 @@
 /* WiFi */
 #define WIFI_SSID "iPhone (Karol)"
 #define WIFI_PASS "karol1234"
+
+/* HTTPS Frequency Data Source (API) */
+#define WEB_SERVER "extranet.nationalgrid.com"
+#define WEB_PORT "443"
+#define WEB_URL "https://extranet.nationalgrid.com/Realtime/Home/SystemData"
