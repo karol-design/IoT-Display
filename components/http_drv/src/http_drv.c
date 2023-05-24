@@ -34,14 +34,12 @@ static void https_get_task(void *pvParameters) {
     mbedtls_ssl_config_init(&conf);
 
     mbedtls_entropy_init(&entropy);
-    if ((ret = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy,
-                                     NULL, 0)) != 0) {
+    if ((ret = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy, NULL, 0)) != 0) {
         ESP_LOGE(TAG, "mbedtls_ctr_drbg_seed returned %d", ret);
         abort();
     }
-
+    
     ESP_LOGI(TAG, "Attaching the certificate bundle...");
-
     ret = esp_crt_bundle_attach(&conf);
 
     if (ret < 0) {
