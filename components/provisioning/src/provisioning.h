@@ -7,4 +7,4 @@
 #pragma once
 #include "config_macros.h"
 
-esp_err_t provisioning_init();
+esp_err_t provisioning_init(bool reset_provisioning);

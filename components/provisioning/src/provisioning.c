@@ -19,7 +19,6 @@
 
 #define TAG "provisioning"
 
-#define EXAMPLE_RESET_PROV_MGR_ON_FAILURE 1
 #define EXAMPLE_PROV_MGR_MAX_RETRY_CNT 5
 
 /* Signal Wi-Fi events on this event-group */
@@ -55,7 +54,7 @@ static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_
                          "\n\tPlease reset to factory and retry provisioning",
                          (*reason == WIFI_PROV_STA_AUTH_ERROR) ? "Wi-Fi station authentication failed" : "Wi-Fi access-point not found");
                 retries++;
-                if (retries >= CONFIG_EXAMPLE_PROV_MGR_MAX_RETRY_CNT) {
+                if (retries >= EXAMPLE_PROV_MGR_MAX_RETRY_CNT) {
                     ESP_LOGI(TAG, "Failed to connect with provisioned AP, reseting provisioned credentials");
                     wifi_prov_mgr_reset_sm_state_on_failure();
                     retries = 0;
