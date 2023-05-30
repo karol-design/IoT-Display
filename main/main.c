@@ -12,7 +12,7 @@
 #include "freertos/FreeRTOS.h"
 #include "http_drv.h"
 #include "nvs_flash.h"
-#include "wifi_drv.h"
+#include "provisioning.h"
 
 #define TAG "app"
 

@@ -2,5 +2,5 @@
 
 idf_component_register( SRCS "main.c"
 		INCLUDE_DIRS "."
-		PRIV_REQUIRES config nvs_flash wifi_drv http_drv esp_http_client)
+		PRIV_REQUIRES config nvs_flash provisioning http_drv esp_http_client)
 

@@ -1,12 +1,15 @@
 /**
- * @file    wifi_drv.c
- * @brief   Provisioning manager: Initialize, configure and start Wi-Fi in a station mode, handle WiFi and IP events
+ * @file    provisioning.c
+ * @brief   Configure WiFi with ESP Provisioning Manager, connect to the AP, handle WiFi and IP events
  * @author  Karol Wojslaw (karol.wojslaw@student.manchester.ac.uk)
  */
 
-#include "wifi_drv.h"
+#include "provisioning.h"
 
-#include "esp_log.h"
+#include "esp_event.h"
+#include "esp_wifi.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/event_groups.h"
 #include "freertos/task.h"
 #include "nvs_flash.h"
 #include "qrcode.h"
@@ -15,7 +18,7 @@
 #include "wifi_provisioning/manager.h"
 #include "wifi_provisioning/scheme_ble.h"
 
-#define TAG "wifi_drv"
+#define TAG "provisioning"
 
 #define EXAMPLE_RESET_PROV_MGR_ON_FAILURE 1
 #define EXAMPLE_PROV_MGR_MAX_RETRY_CNT 5
