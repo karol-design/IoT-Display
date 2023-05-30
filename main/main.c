@@ -25,19 +25,14 @@ void app_main(void) {
         err = nvs_flash_init();              // And try initialising it again
     }
 
-    ESP_ERROR_CHECK(wifi_drv_init());        // Initialise WiFi
-    while (wifi_drv_connected() == false) {  // Wait for the device to connect to the AP
-        vTaskDelay(100 / portTICK_PERIOD_MS);
-    }
-    ESP_LOGI(TAG, "WiFi RSSI: %d", wifi_drv_get_rssi());
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+    ESP_ERROR_CHECK(esp_event_loop_create_default()); // Initialize the event loop
+
+    ESP_ERROR_CHECK(provisioning_init()); // Run provisioning and establish WiFi connection
 
     https_drv_init();
 
     while (true) {
-        if (wifi_drv_connected() == false) {
-            ESP_LOGE(TAG, "WiFi drv fault: %d", wifi_drv_connected());
-            esp_restart();  // Reboot the microcontroller
-        }
+        ESP_LOGI(TAG, "Running...");
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
     }
 }
