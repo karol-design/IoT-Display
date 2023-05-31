@@ -19,18 +19,18 @@
 
 #define TAG "provisioning"
 
-#define EXAMPLE_PROV_MGR_MAX_RETRY_CNT 5
-
 /* Signal Wi-Fi events on this event-group */
 const int WIFI_CONNECTED_EVENT = BIT0;
 static EventGroupHandle_t wifi_event_group;
 
-#define PROV_QR_VERSION "v1"
-#define PROV_TRANSPORT_SOFTAP "softap"
-#define PROV_TRANSPORT_BLE "ble"
-#define QRCODE_BASE_URL "https://espressif.github.io/esp-jumpstart/qrcode.html"
-
-/* Event handler for catching system events */
+/**
+ * @brief Event handler for Wi-Fi provisioning and connection events.
+ *
+ * @param arg Pointer to user-defined data passed to the event handler.
+ * @param event_base Event base of the received event.
+ * @param event_id Event ID of the received event.
+ * @param event_data Pointer to the event data associated with the received event.
+ */
 static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data) {
     static int retries;
     if (event_base == WIFI_PROV_EVENT) {
@@ -51,10 +51,10 @@ static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_
                 wifi_prov_sta_fail_reason_t *reason = (wifi_prov_sta_fail_reason_t *)event_data;
                 ESP_LOGE(TAG,
                          "Provisioning failed!\n\tReason : %s"
-                         "\n\tPlease reset to factory and retry provisioning",
+                         "\n\tPlease reset the device and retry provisioning",
                          (*reason == WIFI_PROV_STA_AUTH_ERROR) ? "Wi-Fi station authentication failed" : "Wi-Fi access-point not found");
                 retries++;
-                if (retries >= EXAMPLE_PROV_MGR_MAX_RETRY_CNT) {
+                if (retries >= PROV_MGR_MAX_RETRY_CNT) {
                     ESP_LOGI(TAG, "Failed to connect with provisioned AP, reseting provisioned credentials");
                     wifi_prov_mgr_reset_sm_state_on_failure();
                     retries = 0;
@@ -74,13 +74,14 @@ static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_
         }
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
         esp_wifi_connect();
+        ESP_LOGI(TAG, "Connected to the WiFi AP");
     } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
         ESP_LOGI(TAG, "Connected with IP Address:" IPSTR, IP2STR(&event->ip_info.ip));
         /* Signal main application to continue execution */
         xEventGroupSetBits(wifi_event_group, WIFI_CONNECTED_EVENT);
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
-        ESP_LOGI(TAG, "Disconnected. Connecting to the AP again...");
+        ESP_LOGW(TAG, "Disconnected. Connecting to the AP again...");
         esp_wifi_connect();
     }
 }
@@ -139,6 +140,30 @@ static void wifi_prov_print_qr(const char *name, const char *pop, const char *tr
     }
 
     ESP_LOGI(TAG, "If QR code is not visible, copy paste the below URL in a browser.\n%s?data=%s", QRCODE_BASE_URL, payload);
+}
+
+/**
+ * @brief Retrieves the Received Signal Strength Indicator (RSSI) from the connected Access Point (AP).
+ *
+ * @param rssi Pointer to a variable where the RSSI value will be stored.
+ * @return  - ESP_OK if the AP information, including the RSSI, was successfully retrieved.
+ *          - ESP_ERR_INVALID_ARG if the `rssi` parameter is NULL.
+ *          - An error code if there was a failure in retrieving the AP information.
+ */
+esp_err_t provisioning_get_rssi(uint16_t *rssi) {
+    if (rssi == NULL) {
+        ESP_LOGE(TAG, "Invalid argument: rssi is NULL");
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    wifi_sta_info_t sta_info;
+    esp_err_t ret = esp_wifi_sta_get_ap_info(&sta_info);
+    if (ret == ESP_OK) {        // AP info successfully retrieved
+        *rssi = sta_info.rssi;  // Value of RSSI (dBm) copied to the rssi variable
+    } else {
+        ESP_LOGW(TAG, "Failed to retrieve AP information (including RSSI)");
+    }
+    return ret;
 }
 
 /**

@@ -21,3 +21,9 @@
 #define WEB_SERVER "extranet.nationalgrid.com"
 #define WEB_PORT "443"
 #define WEB_URL "https://extranet.nationalgrid.com/Realtime/Home/SystemData"
+
+/* WiFi Provisioning */
+#define PROV_MGR_MAX_RETRY_CNT 5
+#define PROV_QR_VERSION "v1"
+#define PROV_TRANSPORT_BLE "ble"
+#define QRCODE_BASE_URL "https://espressif.github.io/esp-jumpstart/qrcode.html"
