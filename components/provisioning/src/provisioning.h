@@ -7,4 +7,5 @@
 #pragma once
 #include "config_macros.h"
 
+esp_err_t provisioning_get_rssi(int8_t *rssi);
 esp_err_t provisioning_init(bool reset_provisioning);

@@ -21,6 +21,7 @@ void app_main(void) {
 
     err = nvs_flash_init();  // Initialize NVS
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_LOGW(TAG, "Error when initialising NVS. Erasing NVS and retrying...");
         ESP_ERROR_CHECK(nvs_flash_erase());  // Erase NVS flash memory
         err = nvs_flash_init();              // And try initialising it again
     }
@@ -33,7 +34,9 @@ void app_main(void) {
     https_drv_init();
 
     while (true) {
-        ESP_LOGI(TAG, "Running...");
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        int8_t rssi;
+        ESP_ERROR_CHECK(provisioning_get_rssi(&rssi));
+        ESP_LOGI(TAG, "WiFi RSSI: %d dBm", rssi);
+        vTaskDelay(10000 / portTICK_PERIOD_MS);
     }
 }

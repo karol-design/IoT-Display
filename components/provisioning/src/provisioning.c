@@ -150,16 +150,16 @@ static void wifi_prov_print_qr(const char *name, const char *pop, const char *tr
  *          - ESP_ERR_INVALID_ARG if the `rssi` parameter is NULL.
  *          - An error code if there was a failure in retrieving the AP information.
  */
-esp_err_t provisioning_get_rssi(uint16_t *rssi) {
+esp_err_t provisioning_get_rssi(int8_t *rssi) {
     if (rssi == NULL) {
         ESP_LOGE(TAG, "Invalid argument: rssi is NULL");
         return ESP_ERR_INVALID_ARG;
     }
 
-    wifi_sta_info_t sta_info;
-    esp_err_t ret = esp_wifi_sta_get_ap_info(&sta_info);
+    wifi_ap_record_t ap_info;
+    esp_err_t ret = esp_wifi_sta_get_ap_info(&ap_info);
     if (ret == ESP_OK) {        // AP info successfully retrieved
-        *rssi = sta_info.rssi;  // Value of RSSI (dBm) copied to the rssi variable
+        *rssi = ap_info.rssi;  // Value of RSSI (dBm) copied to the rssi variable
     } else {
         ESP_LOGW(TAG, "Failed to retrieve AP information (including RSSI)");
     }
