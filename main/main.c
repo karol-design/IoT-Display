@@ -31,7 +31,7 @@ void app_main(void) {
     bool perform_reprovisioning = true;
     ESP_ERROR_CHECK(provisioning_init(perform_reprovisioning)); // Run provisioning and establish WiFi connection
 
-    https_drv_init();
+    data_scraping_init();
 
     while (true) {
         int8_t rssi;

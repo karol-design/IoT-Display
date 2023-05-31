@@ -1,12 +1,12 @@
 /**
- * @file    http_drv.c
+ * @file    data_scraping.c
  * @brief   ...
  * @author  Karol Wojslaw (wojslaw.tech@gmail.com)
  */
 
-#include "http_drv.h"
+#include "data_scraping.h"
 
-#define TAG "http_drv"
+#define TAG "data_scraping"
 
 static const char *REQUEST = "GET " WEB_URL
                              " HTTP/1.0\r\n"
@@ -194,6 +194,6 @@ static void https_get_task(void *pvParameters) {
     }
 }
 
-void https_drv_init(void) {
+void data_scraping_init(void) {
     xTaskCreate(&https_get_task, "https_get_task", 8192, NULL, 5, NULL);
 }

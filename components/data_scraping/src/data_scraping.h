@@ -1,5 +1,5 @@
 /**
- * @file    http_drv.h
+ * @file    data_scraping.h
  * @brief   ...
  * @author  Karol Wojslaw (wojslaw.tech@gmail.com)
  */
@@ -23,4 +23,4 @@
 #include "mbedtls/platform.h"
 #include "mbedtls/ssl.h"
 
-void https_drv_init(void);
+void data_scraping_init(void);
