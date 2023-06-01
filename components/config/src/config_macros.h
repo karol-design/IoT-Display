@@ -21,6 +21,8 @@
 #define WEB_SERVER "extranet.nationalgrid.com"
 #define WEB_PORT "443"
 #define WEB_URL "https://extranet.nationalgrid.com/Realtime/Home/SystemData"
+#define HTML_BUFFER_SIZE 2048
+#define TEMP_BUFFER_SIZE 30
 
 /* WiFi Provisioning */
 #define PROV_MGR_MAX_RETRY_CNT 5

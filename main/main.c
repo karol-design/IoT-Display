@@ -18,6 +18,7 @@
 
 void app_main(void) {
     esp_err_t err = ESP_OK;
+    float freq_hz = 0.0;
 
     err = nvs_flash_init();  // Initialize NVS
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -28,8 +29,9 @@ void app_main(void) {
 
     ESP_ERROR_CHECK(esp_event_loop_create_default()); // Initialize the event loop
 
-    bool perform_reprovisioning = true;
+    bool perform_reprovisioning = false;
     ESP_ERROR_CHECK(provisioning_init(perform_reprovisioning)); // Run provisioning and establish WiFi connection
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
 
     data_scraping_init();
 
@@ -37,6 +39,10 @@ void app_main(void) {
         int8_t rssi;
         ESP_ERROR_CHECK(provisioning_get_rssi(&rssi));
         ESP_LOGI(TAG, "WiFi RSSI: %d dBm", rssi);
+
+        ESP_ERROR_CHECK(data_scraping_get_freq(&freq_hz));
+        ESP_LOGI(TAG, "Frequency: %.2f Hz", freq_hz);
+
         vTaskDelay(10000 / portTICK_PERIOD_MS);
     }
 }
