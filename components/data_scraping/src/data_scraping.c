@@ -79,7 +79,7 @@ static void mbedtls_reset(void) {
 esp_err_t data_scraping_get_freq(float* freq) {
     esp_err_t err = ESP_OK;
     int ret, flags, len;
-    char buf[HTML_BUFFER_SIZE];
+    char buf[HTTP_BUFFER_SIZE];
 
     mbedtls_net_init(&server_fd);   // Initialize network context
     ESP_LOGI(TAG, "Connecting to %s:%s...", WEB_SERVER, WEB_PORT);
