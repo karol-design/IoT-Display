@@ -81,12 +81,12 @@ esp_err_t ui_startup_animation(const ui_config_t *ui) {
     return ESP_OK;
 }
 
-esp_err_t ui_display_freq(const ui_config_t *ui, const float freq_float) {
-    ESP_LOGI(TAG, "Display frequency");
+esp_err_t ui_display_freq(const ui_config_t *ui, const float freq_float, const bool dots) {
+    ESP_LOGD(TAG, "Display frequency");
     uint16_t freq_int = (uint16_t)(freq_float * 100);
 
     tm1637_set_brightness((ui->led), UI_LED_MAX_BRIGHT);
-    tm1637_set_number_lead_dot((ui->led), freq_int, true, 0x01);
+    tm1637_set_number_lead_dot((ui->led), freq_int, true, dots ? 0xFF : 0x00);
     
     return ESP_OK;
 }

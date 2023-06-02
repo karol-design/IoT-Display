@@ -4,21 +4,11 @@
  * @author  Karol Wojslaw (wojslaw.tech@gmail.com)
  */
 
-#include <driver/gpio.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/time.h>
-#include <time.h>
-
 #include "data_scraping.h"
 #include "esp_event.h"
-#include "esp_system.h"
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 #include "nvs_flash.h"
 #include "provisioning.h"
-#include "tm1637.h"
 #include "ui.h"
 
 #define TAG "app"
@@ -60,7 +50,10 @@ void app_main(void) {
 
         ESP_ERROR_CHECK(data_scraping_get_freq(&freq_hz));
         ESP_LOGI(TAG, "Frequency: %.2f Hz", freq_hz);
-        ESP_ERROR_CHECK(ui_display_freq(&ui, freq_hz));
-        vTaskDelay(30000 / portTICK_PERIOD_MS);  // Update frequency every 30 seconds
+
+        for(int i = 0; i < 75; i++) {   // Turn the dots on & off for 60 seconds
+            ESP_ERROR_CHECK(ui_display_freq(&ui, freq_hz, (i%2)));
+            vTaskDelay(800 / portTICK_PERIOD_MS);
+        }
     }
 }

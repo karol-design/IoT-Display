@@ -42,9 +42,10 @@ esp_err_t ui_startup_animation(const ui_config_t *ui);
  *
  * @param ui Pointer to a ui_config_t structure representing the user interface configuration. Must not be NULL.
  * @param freq_float The frequency value to display on the user interface.
+ * @param dots Flag for deciding if dots should be on or off.
  * @return `ESP_OK` if the frequency was displayed successfully, otherwise an error code.
  */
-esp_err_t ui_display_freq(const ui_config_t *ui, const float freq_float);
+esp_err_t ui_display_freq(const ui_config_t *ui, const float freq_float, const bool dots);
 
 /**
  * @brief Display a message on the user interface.
