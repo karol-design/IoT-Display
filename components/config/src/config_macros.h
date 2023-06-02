@@ -14,6 +14,9 @@
 #define PIN_TM1637_CLK 16   // GPIO number (IOxx) for CLK pin of TM1637 display.
 #define PIN_TM1637_DIO 17   // GPIO number (IOxx) for DIO pin of TM1637 display.
 
+/* User interface */
+#define UI_LED_MAX_BRIGHT 7 // Max LED DIsplay brightness (for TM1637: 0-7)
+
 /* WiFi */
 #define WIFI_SSID "iPhone (Karol)"  // WiFi Access Point SSID
 #define WIFI_PASS "karol1234"       // WiFi Access Point Password
@@ -22,8 +25,8 @@
 #define WEB_SERVER "extranet.nationalgrid.com"  // Web server with freq data
 #define WEB_PORT "443"                          // Web port (443 for SSL)
 #define WEB_URL "https://extranet.nationalgrid.com/Realtime/Home/SystemData"    // URL with freq data 
-#define HTTP_BUFFER_SIZE 2048   // Size of the buffer for HTTP response message (with HTML file)
-#define TEMP_BUFFER_SIZE 30     // Temporary buffer size (for searching Frequency data)
+#define HTTP_BUFFER_SIZE 2048       // Size of the buffer for HTTP response message (with HTML file)
+#define TEMP_BUFFER_SIZE 30         // Temporary buffer size (for searching Frequency data)
 
 /* WiFi Provisioning */
 #define PROV_MGR_MAX_RETRY_CNT 5    // Max number of provisioning retries before resetting Prov Mgr
