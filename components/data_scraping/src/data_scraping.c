@@ -1,6 +1,6 @@
 /**
  * @file    data_scraping.c
- * @brief   ...
+ * @brief   Establish SSL/TLS connection and extract frequency data from HTTP response
  * @author  Karol Wojslaw (wojslaw.tech@gmail.com)
  */
 

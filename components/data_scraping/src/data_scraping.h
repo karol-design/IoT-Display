@@ -1,6 +1,6 @@
 /**
  * @file    data_scraping.h
- * @brief   ...
+ * @brief   Establish SSL/TLS connection and extract frequency data from HTTP response
  * @author  Karol Wojslaw (wojslaw.tech@gmail.com)
  */
 
@@ -8,6 +8,5 @@
 
 #include "config_macros.h"
 
-// void https_get_task(void);
 esp_err_t data_scraping_init(void);
 esp_err_t data_scraping_get_freq(float* freq);

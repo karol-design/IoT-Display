@@ -13,9 +13,11 @@
 /* PIN Assignment */
 #define PIN_TM1637_CLK 16   // GPIO number (IOxx) for CLK pin of TM1637 display.
 #define PIN_TM1637_DIO 17   // GPIO number (IOxx) for DIO pin of TM1637 display.
+#define GPIO_BUTTON 23      // GPIO number (IOxx) for the button
 
 /* User interface */
-#define UI_LED_MAX_BRIGHT 7 // Max LED DIsplay brightness (for TM1637: 0-7)
+#define UI_LED_MAX_BRIGHT 7             // Max LED DIsplay brightness (for TM1637: 0-7)
+#define BUTTON_DEBOUNCE_MIN_COUNT 10    // Stable output counter min value for debounced output
 
 /* WiFi */
 #define WIFI_SSID "iPhone (Karol)"  // WiFi Access Point SSID
