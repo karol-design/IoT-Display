@@ -22,7 +22,7 @@ const unsigned char seven_seg_digits_decode_gfedcba[75]= {
 /*  T     U     V     W     X     Y     Z     [     \     ]     ^     _     */
     0x78, 0x3E, 0x1C, 0x1D, 0x64, 0x6E, 0x5B, 0x00, 0x00, 0x00, 0x00, 0x00, 
 /*  `     a     b     c     d     e     f     g     h     i     j     k     */
-    0x00, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71, 0x3D, 0x76, 0x30, 0x1E, 0x75, 
+    0x00, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71, 0x3D, 0x76, 0x10, 0x1E, 0x75, 
 /*  l     m     n     o     p     q     r     s     t     u     v     w     */
     0x38, 0x55, 0x54, 0x5C, 0x73, 0x67, 0x50, 0x6D, 0x78, 0x3E, 0x1C, 0x1D, 
 /*  x     y     z     */
@@ -114,7 +114,10 @@ esp_err_t ui_display_message(const ui_config_t *ui, const ui_message_t message) 
             ESP_ERROR_CHECK(ui_display_string("Conn", ui));
             break;
         case UI_MESSAGE_RUNNING:
-            ESP_ERROR_CHECK(ui_display_string("runn", ui));
+            ESP_ERROR_CHECK(ui_display_string("On__", ui));
+            break;
+        case UI_MESSAGE_WIFI:
+            ESP_ERROR_CHECK(ui_display_string("UiFi", ui));
             break;
         default:
             ESP_ERROR_CHECK(ui_display_string("inv-", ui));

@@ -33,9 +33,14 @@ void app_main(void) {
 
     ESP_ERROR_CHECK(esp_event_loop_create_default());  // Initialize the event loop
 
-    ESP_ERROR_CHECK(ui_display_message(&ui, UI_MESSAGE_PROV));
-
+    
     bool perform_reprovisioning = ui_get_button_level(&ui);
+    if(perform_reprovisioning == true) {
+        ESP_ERROR_CHECK(ui_display_message(&ui, UI_MESSAGE_PROV));
+    } else {
+        ESP_ERROR_CHECK(ui_display_message(&ui, UI_MESSAGE_WIFI));
+    }
+
     ESP_ERROR_CHECK(provisioning_init(perform_reprovisioning));  // Run provisioning and establish WiFi connection
 
     vTaskDelay(2000 / portTICK_PERIOD_MS);
