@@ -33,9 +33,13 @@ void app_main(void) {
 
     ESP_ERROR_CHECK(esp_event_loop_create_default());  // Initialize the event loop
 
-    ESP_ERROR_CHECK(ui_display_message(&ui, UI_MESSAGE_PROV));
+    bool perform_reprovisioning = ui_get_button_level(&ui);
+    if(perform_reprovisioning == true) {
+        ESP_ERROR_CHECK(ui_display_message(&ui, UI_MESSAGE_PROV));
+    } else {
+        ESP_ERROR_CHECK(ui_display_message(&ui, UI_MESSAGE_WIFI));
+    }
 
-    bool perform_reprovisioning = false;
     ESP_ERROR_CHECK(provisioning_init(perform_reprovisioning));  // Run provisioning and establish WiFi connection
 
     vTaskDelay(2000 / portTICK_PERIOD_MS);
@@ -51,9 +55,9 @@ void app_main(void) {
         ESP_ERROR_CHECK(data_scraping_get_freq(&freq_hz));
         ESP_LOGI(TAG, "Frequency: %.2f Hz", freq_hz);
 
-        for(int i = 0; i < 75; i++) {   // Turn the dots on & off for 60 seconds
+        for(int i = 0; i < 60; i++) {   // Turn the dots on & off for approximately 60 seconds
             ESP_ERROR_CHECK(ui_display_freq(&ui, freq_hz, (i%2)));
-            vTaskDelay(800 / portTICK_PERIOD_MS);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
         }
     }
 }
