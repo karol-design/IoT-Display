@@ -11,6 +11,7 @@
 /* User interface config struct */
 typedef struct {
 	tm1637_led_t* led;
+	
 } ui_config_t;
 
 /* User Interface message type */
@@ -55,3 +56,11 @@ esp_err_t ui_display_freq(const ui_config_t *ui, const float freq_float, const b
  * @return `ESP_OK` if the message was displayed successfully, otherwise an error code.
  */
 esp_err_t ui_display_message(const ui_config_t *ui, const ui_message_t message);
+
+/**
+ * @brief Get current button level.
+ *
+ * @param ui Pointer to a ui_config_t structure representing the user interface configuration. Must not be NULL.
+ * @return Current button level (0 or 1).
+ */
+int ui_get_button_level(ui_config_t *ui);

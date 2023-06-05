@@ -7,6 +7,7 @@
 #include "ui.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "button.h"
 
 #define TAG "ui"
 
@@ -68,6 +69,10 @@ static esp_err_t ui_display_string(char* str, const ui_config_t *ui) {
 esp_err_t ui_init(ui_config_t *ui) {
     (ui->led) = tm1637_init(PIN_TM1637_CLK, PIN_TM1637_DIO);
     ESP_LOGI(TAG, "tm1637 initialised");
+    
+    ESP_ERROR_CHECK(button_init());
+    ESP_LOGI(TAG, "button initialised");
+
     return ESP_OK;
 }
 
@@ -117,4 +122,8 @@ esp_err_t ui_display_message(const ui_config_t *ui, const ui_message_t message) 
     }
 
     return ESP_OK;
+}
+
+int ui_get_button_level(ui_config_t *ui) {
+    return button_get_level();
 }
