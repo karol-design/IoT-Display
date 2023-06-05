@@ -10,17 +10,16 @@
 
 /* User interface config struct */
 typedef struct {
-	tm1637_led_t* led;
-	
+    tm1637_led_t *led;
 } ui_config_t;
 
 /* User Interface message type */
 typedef enum {
-	UI_MESSAGE_ERROR = 0x00,
-	UI_MESSAGE_PROV = 0x01,
-	UI_MESSAGE_CONNECTED = 0x02,
-	UI_MESSAGE_RUNNING = 0x03,
-	UI_MESSAGE_WIFI = 0x04
+    UI_MESSAGE_ERROR = 0x00,
+    UI_MESSAGE_PROV = 0x01,
+    UI_MESSAGE_CONNECTED = 0x02,
+    UI_MESSAGE_RUNNING = 0x03,
+    UI_MESSAGE_WIFI = 0x04
 } ui_message_t;
 
 /**
