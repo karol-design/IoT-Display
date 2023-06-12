@@ -41,7 +41,7 @@ static const char *REQUEST = "GET " WEB_URL
  * @brief Extracts frequency data from a response string.
  *
  * @param response       The response string to search for the frequency data.
- * @param buffer_size    The size of the response buffer.
+ * @param response_size  The size of the response buffer.
  * @param freq           Pointer to a float variable where the extracted frequency will be stored.
  *
  * @return ESP_OK if the frequency data is successfully extracted.
@@ -51,7 +51,7 @@ static esp_err_t extract_freq_data(char *response, size_t response_size, float* 
     char temp_buff[TEMP_BUFFER_SIZE];
     if (response == NULL || freq == NULL) {
         return ESP_ERR_INVALID_ARG;
-    } else if (response_size <= 0 || response_size > (TEMP_BUFFER_SIZE*sizeof(char))) {
+    } else if (response_size == 0) {
         return ESP_ERR_INVALID_SIZE;
     }
 
