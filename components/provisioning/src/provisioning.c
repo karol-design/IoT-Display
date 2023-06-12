@@ -8,12 +8,8 @@
 
 #include "esp_event.h"
 #include "esp_wifi.h"
-#include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
-#include "freertos/task.h"
-#include "nvs_flash.h"
 #include "qrcode.h"
-#include "stdio.h"
 #include "wifi_provisioning/manager.h"
 #include "wifi_provisioning/scheme_ble.h"
 
@@ -162,6 +158,7 @@ esp_err_t provisioning_get_rssi(int8_t *rssi) {
         *rssi = ap_info.rssi;  // Value of RSSI (dBm) copied to the rssi variable
     } else {
         ESP_LOGW(TAG, "Failed to retrieve AP information (including RSSI)");
+        *rssi = 0;
     }
     return ret;
 }
