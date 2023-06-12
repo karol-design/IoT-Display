@@ -49,8 +49,10 @@ static const char *REQUEST = "GET " WEB_URL
  */
 static esp_err_t extract_freq_data(char *response, size_t response_size, float* freq) {
     char temp_buff[TEMP_BUFFER_SIZE];
-    if (response == NULL || response_size == 0) {
+    if (response == NULL || freq == NULL) {
         return ESP_ERR_INVALID_ARG;
+    } else if (response_size <= 0 || response_size > (TEMP_BUFFER_SIZE*sizeof(char))) {
+        return ESP_ERR_INVALID_SIZE;
     }
 
     char* r = response;
