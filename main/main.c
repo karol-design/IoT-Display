@@ -22,7 +22,7 @@ void app_main(void) {
     ESP_ERROR_CHECK(ui_init(&ui));               // Initialise User Interface
     ESP_ERROR_CHECK(ui_startup_animation(&ui));  // Run startup animation
     ESP_ERROR_CHECK(ui_display_message(&ui, UI_MESSAGE_RUNNING));
-    vTaskDelay(2500 / portTICK_PERIOD_MS);
+    vTaskDelay(4000 / portTICK_PERIOD_MS);
 
     err = nvs_flash_init();  // Initialize NVS
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {

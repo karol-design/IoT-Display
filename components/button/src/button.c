@@ -27,7 +27,7 @@ static int button_get_level_debounce(gpio_num_t gpio) {
     int gpio_level, gpio_level_last = -1;
 
     while(stable_output_count < BUTTON_DEBOUNCE_MIN_COUNT){
-        gpio_level = gpio_get_level(gpio);
+        gpio_level = !gpio_get_level(gpio);
 
         if(gpio_level == gpio_level_last) { // If GPIO level is unchanged since the last reading...
             stable_output_count++;          // ...increase stable output counter

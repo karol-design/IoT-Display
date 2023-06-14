@@ -13,7 +13,7 @@
 /* PIN Assignment */
 #define PIN_TM1637_CLK 16   // GPIO number (IOxx) for CLK pin of TM1637 display.
 #define PIN_TM1637_DIO 17   // GPIO number (IOxx) for DIO pin of TM1637 display.
-#define GPIO_BUTTON 23      // GPIO number (IOxx) for the button
+#define GPIO_BUTTON 0       // GPIO number (IOxx) for the button
 
 /* User interface */
 #define UI_LED_MAX_BRIGHT 7             // Max LED DIsplay brightness (for TM1637: 0-7)
