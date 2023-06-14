@@ -1,6 +1,7 @@
-## any-clock | IoT Clock-like display capable of extracting and dipsplaying data from any website
+# >/ any-clock
+## IoT clock-like display capable of extracting and dipsplaying data from any website
 
-The any-clock is not your ordinary desk clock. Instead of a boring and ubiquitous time display, it shows the real-time data extracted from any http/https website.
+The any-clock is not your ordinary desk clock. Instead of a boring and ubiquitous time display, it shows the real-time data extracted from any html file/website available on a given http/https server.
 
 ### CI Workflow results
 
@@ -26,7 +27,7 @@ Connect the USB cable to a mains USB charger or any USB socket (e.g., on your la
 3) Provisioning:
 Open the "ESP BLE Provisioning" app and follow these instructions:
 Scan the QR Code from the device, choose the Wi-Fi AP, and enter the password.
-Alternatively, search manually for the device, enter the proof-of-possession (PoP) code [0000 for this device], select the Wi-Fi network, and enter the password.
+Alternatively, search manually for the device, enter the proof-of-possession (PoP) code [0000 by default], select the Wi-Fi network, and enter the password.
 
 4) any-clock running:
 The any-clock should now display the "conn" message, and within a few seconds, the data should be extracted and displayed. In case of a restart, the any-clock will attempt to connect to the same Wi-Fi AP used during the last provisioning. You can uninstall the "ESP BLE Provisioning" app now.
@@ -34,9 +35,8 @@ The any-clock should now display the "conn" message, and within a few seconds, t
 ### Reprovisioning
 
 If you need to change the Wi-Fi credentials, follow these steps:
-- Turn off the any-clock by disconnecting the USB cable.
-- Press and hold the reset button on the any-clock.
-- Plug the power back in while keeping the reset button pressed.
-- Release the reset button when you see the provisioning ("Prov") message.
-- Repeat steps 3 and 4 from the "Provisioning" section in the instruction above.
+- Reset the any-Clock by unplugging and plugging back the USB cable.
+- Wait for the "on" message, then press and hold the Boot button accessed from the bottom of the any-Clock.
+- Release the Boot button when you see the provisioning ("Prov") message.
+- Repeat steps 3 and 4 from the "How to use it?" section above.
 
