@@ -4,12 +4,12 @@
 The any-clock is not your ordinary desk clock. Instead of a boring and ubiquitous time display, it shows the real-time data extracted from any html file/website available on a given http/https server.
 
 ### CI Workflow results
-
 ![ESP-IDF CI Build](https://github.com/karol-design/IoT-Display/actions/workflows/esp-idf.yml/badge.svg)
-
 
 ## About 
 The any-clock utilizes the ESP32 microcontroller with built-in Wi-Fi. Once provisioned, it can connect to any available Wi-Fi access point (AP) within range. The device operates exclusively with 2.4 GHz Wi-Fi APs and should be placed no further than 15 meters from the AP.
+
+![First prototype of any-clock](https://i.ibb.co/qsN0rL9/Lead-photo-blurred.png)
 
 ## Contributing (Firmware)
 Commit to the main only the code that compile without any warnings or errors.
